@@ -32,13 +32,18 @@ router.get("/", async (req: Request, res: Response) => {
       sort === "toprated" ? { rating: -1 } :
       { createdAt: -1 };
 
-    const filter = {
+    const filter: any = {
       $or: [
         { approvalStatus: "approved" },
         { approvalStatus: { $exists: false } },
         { addedBy: "admin" },
       ],
     };
+
+    if (req.query.isFeatured === "true") {
+      filter.isFeatured = true;
+    }
+
     const totalProducts = await Product.countDocuments(filter);
     const products = await Product.find(filter)
       .populate("supplier", "businessName businessSlug")

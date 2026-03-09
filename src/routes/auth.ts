@@ -68,6 +68,7 @@ router.post("/register", async (req: Request, res: Response) => {
     res.cookie("token", token, COOKIE_OPTS);
     res.status(201).json({
       message: "Account created successfully",
+      token,
       user: { _id: user._id.toString(), name: user.name, email: user.email, role: user.role, isAdmin: user.isAdmin },
     });
   } catch (err) {
@@ -93,6 +94,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const token = signToken(user);
     res.cookie("token", token, COOKIE_OPTS);
     res.json({
+      token,
       user: {
         _id: user._id.toString(),
         name: user.name,

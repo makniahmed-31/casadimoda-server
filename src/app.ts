@@ -11,6 +11,10 @@ import searchRouter from "./routes/search";
 import colorsRouter from "./routes/colors";
 import wishlistRouter from "./routes/wishlist";
 import publicRouter from "./routes/public";
+import couponRouter from "./routes/coupon";
+import giftcardRouter from "./routes/giftcard";
+import reviewsRouter from "./routes/reviews";
+import uploadRouter from "./routes/upload";
 
 import adminOrdersRouter from "./routes/admin/orders";
 import adminProductsApproveRouter from "./routes/admin/productsApprove";
@@ -61,6 +65,10 @@ app.use("/api/products", productsRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/colors", colorsRouter);
 app.use("/api/wishlist", wishlistRouter);
+app.use("/api/coupon", couponRouter);
+app.use("/api/giftcard", giftcardRouter);
+app.use("/api/reviews", reviewsRouter);
+app.use("/api/upload", uploadRouter);
 app.use("/api", publicRouter);
 
 // Admin — approve must be before generic products to avoid route shadowing

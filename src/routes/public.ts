@@ -36,4 +36,35 @@ router.get("/brands", async (_req: Request, res: Response) => {
   }
 });
 
+// GET /api/navigation (public)
+router.get("/navigation", async (_req: Request, res: Response) => {
+  try {
+    await db.connect();
+    const [categories, subCategories, brands] = await Promise.all([
+      Category.find({}),
+      SubCategory.find({}),
+      Brand.find({}),
+    ]);
+
+    const categoryNames = categories.map(c => c.name);
+    const brandNames = brands.map(b => b.name);
+    
+    const categoryMap: Record<string, string[]> = {};
+    categories.forEach(cat => {
+      categoryMap[cat.name] = subCategories
+        .filter(sub => sub.parentCategory === cat.name)
+        .map(sub => sub.name);
+    });
+
+    res.json({
+      categories: categoryNames,
+      brands: brandNames,
+      categoryMap
+    });
+  } catch (err) {
+    console.error("[GET /api/navigation]", err);
+    res.status(500).json({ message: "Error fetching navigation data" });
+  }
+});
+
 export default router;
