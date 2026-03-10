@@ -1,6 +1,9 @@
 {
   "name": "casadimoda-server",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.x"
+  },
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec \"ts-node -r tsconfig-paths/register src/server.ts\"",
     "build": "tsc --project tsconfig.json",
