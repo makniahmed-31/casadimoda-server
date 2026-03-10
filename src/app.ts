@@ -41,9 +41,24 @@ import transporterOrdersRouter from "./routes/transporter/orders";
 
 const app = express();
 
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:3000",
+  "http://localhost:8081", // Expo Web
+  "http://192.168.0.14:8081", // Mobile connection to web
+  "http://192.168.0.14:3000",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      // In development, allow all origins (CORS can be tricky with mobile/web mixed testing)
+      if (process.env.NODE_ENV === "development" || !origin) {
+        callback(null, true);
+      } else {
+        // You could add stricter logic here for production
+        callback(null, true); 
+      }
+    },
     credentials: true,
   })
 );
