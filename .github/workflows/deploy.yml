@@ -19,6 +19,15 @@ jobs:
           script: |
             cd /var/www/casadimoda-server
             git pull origin main
+            echo "NODE_ENV=production" > .env
+            echo "PORT=${{ secrets.SERVER_PORT }}" >> .env
+            echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env
+            echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> .env
+            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> .env
+            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> .env
+            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> .env
             npm ci
             npm run build
             pm2 restart casadimoda-server --update-env
