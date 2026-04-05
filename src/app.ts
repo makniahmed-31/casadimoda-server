@@ -15,6 +15,7 @@ import couponRouter from "./routes/coupon";
 import giftcardRouter from "./routes/giftcard";
 import reviewsRouter from "./routes/reviews";
 import uploadRouter from "./routes/upload";
+import siteConfigRouter from "./routes/siteConfig";
 
 import adminOrdersRouter from "./routes/admin/orders";
 import adminProductsApproveRouter from "./routes/admin/productsApprove";
@@ -29,6 +30,7 @@ import adminCouponsRouter from "./routes/admin/coupons";
 import adminGiftcardsRouter from "./routes/admin/giftcards";
 import adminSuppliersRouter from "./routes/admin/suppliers";
 import adminTransportersRouter from "./routes/admin/transporters";
+import adminSiteConfigRouter from "./routes/admin/siteConfig";
 
 import supplierRegisterRouter from "./routes/supplier/register";
 import supplierProfileRouter from "./routes/supplier/profile";
@@ -84,6 +86,7 @@ app.use("/api/coupon", couponRouter);
 app.use("/api/giftcard", giftcardRouter);
 app.use("/api/reviews", reviewsRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/site-config", siteConfigRouter);
 app.use("/api", publicRouter);
 
 // Admin — approve must be before generic products to avoid route shadowing
@@ -100,6 +103,7 @@ app.use("/api/admin/coupons", adminCouponsRouter);
 app.use("/api/admin/giftcards", adminGiftcardsRouter);
 app.use("/api/admin/suppliers", adminSuppliersRouter);
 app.use("/api/admin/transporters", adminTransportersRouter);
+app.use("/api/admin/site-config", adminSiteConfigRouter);
 
 // Supplier
 app.use("/api/supplier/register", supplierRegisterRouter);
