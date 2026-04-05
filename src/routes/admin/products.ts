@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import slugify from "slugify";
 import db from "../../utils/db";
 import Product from "@/models/Product";
 import User from "@/models/User";
@@ -26,7 +27,19 @@ router.get("/", authenticate, requireAdmin, async (req: Request, res: Response) 
 router.post("/", authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     await db.connect();
-    const product = await Product.create(req.body);
+    const body = req.body;
+    let slug = body.slug || slugify(body.name, { lower: true, strict: true });
+    if (await Product.findOne({ slug })) slug = `${slug}-${Date.now()}`;
+    const product = await Product.create({
+      name: body.name, slug, category: body.category, subCategory: body.subCategory,
+      brand: body.brand, image: body.image, price: body.price, discountPrice: body.discountPrice || 0,
+      countInStock: body.countInStock, description: body.description, deliveryTime: body.deliveryTime,
+      dimensions: body.dimensions, weight: body.weight, cbm: body.cbm, hsCode: body.hsCode,
+      sizes: body.sizes || [], colors: body.colors || [], colorImages: body.colorImages || [],
+      parentCategory: body.parentCategory || "detail",
+      isFeatured: body.isFeatured || false,
+      approvalStatus: "approved", addedBy: "admin",
+    });
     res.status(201).json(product);
   } catch (err) {
     console.error("[POST /api/admin/products]", err);
@@ -37,9 +50,19 @@ router.post("/", authenticate, requireAdmin, async (req: Request, res: Response)
 // PUT /api/admin/products
 router.put("/", authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { id, ...updateData } = req.body;
+    const body = req.body;
+    if (!body.id) { res.status(400).json({ message: "ID required" }); return; }
     await db.connect();
-    const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
+    const updateData = {
+      name: body.name, slug: body.slug, category: body.category, subCategory: body.subCategory,
+      brand: body.brand, image: body.image, price: body.price, discountPrice: body.discountPrice || 0,
+      countInStock: body.countInStock, description: body.description, deliveryTime: body.deliveryTime,
+      dimensions: body.dimensions, weight: body.weight, cbm: body.cbm, hsCode: body.hsCode,
+      sizes: body.sizes || [], colors: body.colors || [], colorImages: body.colorImages || [],
+      parentCategory: body.parentCategory || "detail",
+      isFeatured: body.isFeatured || false,
+    };
+    const product = await Product.findByIdAndUpdate(body.id, updateData, { new: true });
     res.json(product);
   } catch (err) {
     console.error("[PUT /api/admin/products]", err);
