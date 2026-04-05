@@ -9,6 +9,7 @@ jobs:
     name: Deploy Express Server
     runs-on: ubuntu-latest
 
+    environment: NEXTAUTH_SECRET
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -17,7 +18,12 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:/usr/local/bin:/usr/bin"
+
             cd /var/www/casadimoda-server
+            git checkout -- package-lock.json
             git pull origin main
             echo "NODE_ENV=production" > .env
             echo "PORT=${{ secrets.SERVER_PORT }}" >> .env
