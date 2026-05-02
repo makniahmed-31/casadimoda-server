@@ -31,6 +31,7 @@ export interface IProduct extends Document {
   sizes?: string[];
   colors?: string[];
   colorImages?: IColorImage[];
+  productType: "local" | "international";
   parentCategory: ParentCategory;
   isFeatured: boolean;
   supplier?: mongoose.Types.ObjectId;
@@ -72,6 +73,11 @@ const productSchema = new Schema<IProduct>(
     sizes: [{ type: String }],
     colors: [{ type: String }],
     colorImages: [colorImageSchema],
+    productType: {
+      type: String,
+      enum: ["local", "international"],
+      default: "local",
+    },
     parentCategory: {
       type: String,
       enum: ["detail", "gros"],
