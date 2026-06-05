@@ -7,7 +7,7 @@ export type AddedBy = "admin" | "supplier";
 export interface IColorImage {
   color: string;
   hex: string;
-  image: string;
+  images: string[];
 }
 
 export interface IProduct extends Document {
@@ -46,7 +46,7 @@ const colorImageSchema = new Schema<IColorImage>(
   {
     color: { type: String },
     hex: { type: String },
-    image: { type: String },
+    images: [{ type: String }],
   },
   { _id: false },
 );
